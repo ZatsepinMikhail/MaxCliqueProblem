@@ -10,6 +10,7 @@
 #include <exception>
 #include <list>
 #include <vector>
+#include <chrono>
 
 using std::exception;
 using std::list;
@@ -68,7 +69,13 @@ public:
     for (int i = 0; i < vertex_number_; ++i) {
       candidate_set.push_back(i);
     }
+    std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+
     RecursiveFindMaxClique(current_clique, candidate_set);
+
+    std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+    std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
+    std::cout << "MC: It took me " << time_span.count() << " seconds.\n";
     return max_clique_;
   }
 

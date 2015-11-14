@@ -78,7 +78,7 @@ int main() {
   }*/
 
   AlgorithmMC mc_max_clique(adjacency_matrix.size(), adjacency_matrix);
-  AlgorithmMC mcq_max_clique(adjacency_matrix.size(), adjacency_matrix);
+  AlgorithmMCQ mcq_max_clique(adjacency_matrix.size(), adjacency_matrix);
   vector<int> mc_max_clique_result = mc_max_clique.FindMaxClique();
   vector<int> mcq_max_clique_result = mcq_max_clique.FindMaxClique();
   for (int i = 0; i < mc_max_clique_result.size(); ++i) {
