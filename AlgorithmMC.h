@@ -75,9 +75,6 @@ public:
 
   void RecursiveFindMaxClique(vector<int>& current_clique,
                               list<int>& candidate_set) {
-    if (current_clique.size() + candidate_set.size() <= max_clique_.size()) {
-      return;
-    }
     ++current_iteration_;
 
     for (auto it = candidate_set.begin(); it != candidate_set.end(); it = candidate_set.erase(it)) {
@@ -95,15 +92,14 @@ public:
         if (current_clique.size() > max_clique_.size()) {
           SaveMaxClique(current_clique);
         }
-      } else {
+      } else if (current_clique.size() + new_candidate_set.size() > max_clique_.size()) {
         RecursiveFindMaxClique(current_clique, new_candidate_set);
       }
-
       current_clique.pop_back();
     }
   }
 
-private:
+protected:
   void SaveMaxClique(const vector<int>& new_max_clique) {
     max_clique_.clear();
     for (int i = 0; i < new_max_clique.size(); ++i) {
