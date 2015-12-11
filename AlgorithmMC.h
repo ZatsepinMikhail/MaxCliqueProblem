@@ -86,30 +86,30 @@ public:
                               list<int>& candidate_set) {
     ++current_iteration_;
 
-    for (auto it = candidate_set.begin(); it != candidate_set.end(); it = candidate_set.erase(it)) {
+    while(!candidate_set.empty()) {
+
       if (current_clique.size() + candidate_set.size() <= max_clique_.size()) {
         return;
       }
 
-      int new_vertex = *it;
+      int new_vertex = candidate_set.front();
       current_clique.push_back(new_vertex);
 
       //create new candidate set, choose only vertices adjacent to new_vertex
       list<int> new_candidate_set;
-      for (auto inner_it = candidate_set.begin(); inner_it != candidate_set.end(); ++inner_it) {
-        if (adjacency_matrix_[new_vertex][*inner_it]) {
-          new_candidate_set.push_back(*inner_it);
+      for (auto it = candidate_set.begin(); it != candidate_set.end(); ++it) {
+        if (adjacency_matrix_[new_vertex][*it]) {
+          new_candidate_set.push_back(*it);
         }
       }
 
-      if (new_candidate_set.empty()) {
-        if (current_clique.size() > max_clique_.size()) {
+      if (new_candidate_set.empty() && current_clique.size() > max_clique_.size()) {
           SaveMaxClique(current_clique);
-        }
       } else if (current_clique.size() + new_candidate_set.size() > max_clique_.size()) {
         RecursiveFindMaxClique(current_clique, new_candidate_set);
       }
       current_clique.pop_back();
+      candidate_set.pop_front();
     }
   }
 
