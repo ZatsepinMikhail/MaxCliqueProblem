@@ -103,5 +103,4 @@ public:
   }
 };
 
-
 #endif //MAXCLIQUEPROBLEM_ALGORITHMMCQ_H

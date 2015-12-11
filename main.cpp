@@ -2,7 +2,6 @@
 
 #include "AlgorithmMC.h"
 #include "AlgorithmMCQ.h"
-#include <fstream>
 
 using namespace std;
 
