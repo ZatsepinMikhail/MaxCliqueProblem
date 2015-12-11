@@ -20,13 +20,13 @@ class AlgorithmMC {
 
 public:
   AlgorithmMC(const int vertex_number,
-               const vector<vector<bool>>& adjacency_matrix)
+              const vector<vector<bool>>& adjacency_matrix)
       :vertex_number_(vertex_number),
        adjacency_matrix_(adjacency_matrix),
        current_iteration_(0)
       {
 
-        //check for correct arguments
+        //check for correctness of arguments
         if (vertex_number_ <= 0) {
           throw std::invalid_argument("vertex number should be positive");
         }
@@ -63,6 +63,8 @@ public:
   vector<int> FindMaxClique() {
 
     vector<int> current_clique;
+
+    //there will be no reallocations
     current_clique.reserve(vertex_number_);
 
     list<int> candidate_set;
@@ -75,7 +77,7 @@ public:
 
     std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
     std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-    std::cout << "MC: It took me " << time_span.count() << " seconds.\n";
+    std::cout << "MC: It took me " << time_span.count() << " seconds with " << current_iteration_ << " iterations\n";
     return max_clique_;
   }
 
@@ -85,9 +87,14 @@ public:
     ++current_iteration_;
 
     for (auto it = candidate_set.begin(); it != candidate_set.end(); it = candidate_set.erase(it)) {
+      if (current_clique.size() + candidate_set.size() <= max_clique_.size()) {
+        return;
+      }
+
       int new_vertex = *it;
       current_clique.push_back(new_vertex);
 
+      //create new candidate set, choose only vertices adjacent to new_vertex
       list<int> new_candidate_set;
       for (auto inner_it = candidate_set.begin(); inner_it != candidate_set.end(); ++inner_it) {
         if (adjacency_matrix_[new_vertex][*inner_it]) {
@@ -108,10 +115,7 @@ public:
 
 protected:
   void SaveMaxClique(const vector<int>& new_max_clique) {
-    max_clique_.clear();
-    for (int i = 0; i < new_max_clique.size(); ++i) {
-      max_clique_.push_back(new_max_clique[i]);
-    }
+    max_clique_ = new_max_clique;
   }
 
   int current_iteration_;
@@ -119,7 +123,6 @@ protected:
   vector<vector<bool>> adjacency_matrix_;
   vector<int> vertex_degrees_;
 
-  //tmp
   vector<int> max_clique_;
 };
 
