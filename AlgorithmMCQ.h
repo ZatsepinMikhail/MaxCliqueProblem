@@ -12,11 +12,7 @@ class AlgorithmMCQ : public AlgorithmMC{
 
 public:
   AlgorithmMCQ(const int vertex_number, const vector<vector<bool>>& adjacency_matrix)
-      : AlgorithmMC(vertex_number, adjacency_matrix) {
-
-    candidate_colours_.resize(vertex_number_);
-    vertex_colour_classes_.resize(vertex_number_);
-  }
+      : AlgorithmMC(vertex_number, adjacency_matrix) {}
 
   vector<int> FindMaxClique() {
     vector<int> current_clique;
@@ -39,13 +35,14 @@ public:
   void RecursiveFindMaxClique(vector<int>& current_clique,
                               list<int>& candidate_set) {
     ++current_iteration_;
+    vector<int> candidate_colours(vertex_number_, 0);
 
-    PaintCandidates(candidate_set);
+    PaintCandidates(candidate_set, candidate_colours);
 
     while(!candidate_set.empty()) {
 
       int new_vertex = candidate_set.front();
-      if (current_clique.size() + candidate_colours_[new_vertex] <= max_clique_.size()) {
+      if (current_clique.size() + candidate_colours[new_vertex] <= max_clique_.size()) {
         return;
       }
 
@@ -68,30 +65,30 @@ public:
     }
   }
 
-  void PaintCandidates(list<int>& candidate_set) {
+  void PaintCandidates(list<int>& candidate_set, vector<int>& candidate_colours) {
+    vector<list<int>> vertex_colour_classes(vertex_number_);
 
-    candidate_colours_.clear();
     for (int i = 0; i < vertex_number_; ++i) {
-      vertex_colour_classes_[i].clear();
+      vertex_colour_classes[i].clear();
     }
 
     int colour_class_number = 0;
     for (auto curr_vertex = candidate_set.begin(); curr_vertex != candidate_set.end(); ++curr_vertex) {
       int curr_colour_class = 0;
-      while(ExistAdjacentVertex(*curr_vertex, vertex_colour_classes_[curr_colour_class])) {
+      while(ExistAdjacentVertex(*curr_vertex, vertex_colour_classes[curr_colour_class])) {
         ++curr_colour_class;
       }
-      vertex_colour_classes_[curr_colour_class].push_back(*curr_vertex);
+      vertex_colour_classes[curr_colour_class].push_back(*curr_vertex);
       if (curr_colour_class > colour_class_number) {
         colour_class_number = curr_colour_class;
       }
     }
     candidate_set.clear();
     for (int i = colour_class_number; i >= 0; --i) {
-      for (auto element = vertex_colour_classes_[i].begin();
-           element != vertex_colour_classes_[i].end(); ++element) {
+      for (auto element = vertex_colour_classes[i].begin();
+                element != vertex_colour_classes[i].end(); ++element) {
         candidate_set.push_back(*element);
-        candidate_colours_[*element] = i + 1;
+        candidate_colours[*element] = i + 1;
       }
     }
   }
@@ -104,11 +101,6 @@ public:
     }
     return false;
   }
-
-protected:
-
-  vector<int> candidate_colours_;
-  vector<list<int>> vertex_colour_classes_;
 };
 
 

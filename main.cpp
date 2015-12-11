@@ -18,7 +18,7 @@ int main() {
 
   for (size_t i = 0; i < vertex_number; ++i) {
     for (size_t j = i + 1; j < vertex_number; ++j) {
-      adjacency_matrix[i][j] = (rand() % 2 > 0);
+      adjacency_matrix[i][j] = (rand() % 5 > 0);
       adjacency_matrix[j][i] = adjacency_matrix[i][j];
     }
     adjacency_matrix[i][i] = 0;
@@ -37,7 +37,27 @@ int main() {
     cout << "\n";
   }
 
-  /*std::ifstream fin("/home/mikhail/ClionProjects/MaxCliqueProblem/input.csv");
+  AlgorithmMC mc_max_clique(adjacency_matrix.size(), adjacency_matrix);
+  AlgorithmMCQ mcq_max_clique(adjacency_matrix.size(), adjacency_matrix);
+  vector<int> mc_max_clique_result = mc_max_clique.FindMaxClique();
+  vector<int> mcq_max_clique_result = mcq_max_clique.FindMaxClique();
+  cout << mc_max_clique_result.size() << ":\n";
+  for (int i = 0; i < mc_max_clique_result.size(); ++i) {
+    cout << mc_max_clique_result[i] << " ";
+  }
+  cout << "\n";
+
+  cout << mcq_max_clique_result.size() << ":\n";
+  for (int i = 0; i < mcq_max_clique_result.size(); ++i) {
+    cout << mcq_max_clique_result[i] << " ";
+  }
+  cout << "\n";
+  return 0;
+}
+
+
+
+/*std::ifstream fin("/home/mikhail/ClionProjects/MaxCliqueProblem/input.csv");
   if (fin.fail()) {
     throw std::invalid_argument("This file can't be openned.");
   }
@@ -76,21 +96,3 @@ int main() {
     adjacency_matrix.push_back(one_row);
     one_row.clear();
   }*/
-
-  AlgorithmMC mc_max_clique(adjacency_matrix.size(), adjacency_matrix);
-  AlgorithmMCQ mcq_max_clique(adjacency_matrix.size(), adjacency_matrix);
-  vector<int> mc_max_clique_result = mc_max_clique.FindMaxClique();
-  vector<int> mcq_max_clique_result = mcq_max_clique.FindMaxClique();
-  cout << mc_max_clique_result.size() << ":\n";
-  for (int i = 0; i < mc_max_clique_result.size(); ++i) {
-    cout << mc_max_clique_result[i] << " ";
-  }
-  cout << "\n";
-
-  cout << mcq_max_clique_result.size() << ":\n";
-  for (int i = 0; i < mcq_max_clique_result.size(); ++i) {
-    cout << mcq_max_clique_result[i] << " ";
-  }
-  cout << "\n";
-  return 0;
-}
