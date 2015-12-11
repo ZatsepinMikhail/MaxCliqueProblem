@@ -13,10 +13,11 @@ class AlgorithmMCQ : public AlgorithmMC{
 public:
   AlgorithmMCQ(const int vertex_number, const vector<vector<bool>>& adjacency_matrix)
       : AlgorithmMC(vertex_number, adjacency_matrix) {
+
+    candidate_colours_.resize(vertex_number_);
     vertex_colour_classes_.resize(vertex_number_);
   }
 
-  //the same as MC
   vector<int> FindMaxClique() {
     vector<int> current_clique;
     current_clique.reserve(vertex_number_);
@@ -31,23 +32,20 @@ public:
 
     std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
     std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-    std::cout << "MCQ: It took me " << time_span.count() << " seconds.\n";
+    std::cout << "MC: It took me " << time_span.count() << " seconds with " << current_iteration_ << " iterations\n";
     return max_clique_;
   }
 
-
   void RecursiveFindMaxClique(vector<int>& current_clique,
                               list<int>& candidate_set) {
-    std::cout << "In MCQ!\n";
     ++current_iteration_;
 
-    vector<int> candidate_colours(candidate_set.size(), 0);
-    PaintCandidates(candidate_set, candidate_colours);
+    PaintCandidates(candidate_set);
 
     while(!candidate_set.empty()) {
 
       int new_vertex = candidate_set.front();
-      if (current_clique.size() + candidate_colours[new_vertex] <= max_clique_.size()) {
+      if (current_clique.size() + candidate_colours_[new_vertex] <= max_clique_.size()) {
         return;
       }
 
@@ -70,7 +68,9 @@ public:
     }
   }
 
-  void PaintCandidates(list<int>& candidate_set, vector<int>& candidate_colours) {
+  void PaintCandidates(list<int>& candidate_set) {
+
+    candidate_colours_.clear();
     for (int i = 0; i < vertex_number_; ++i) {
       vertex_colour_classes_[i].clear();
     }
@@ -91,7 +91,7 @@ public:
       for (auto element = vertex_colour_classes_[i].begin();
            element != vertex_colour_classes_[i].end(); ++element) {
         candidate_set.push_back(*element);
-        candidate_colours[*element] = i + 1;
+        candidate_colours_[*element] = i + 1;
       }
     }
   }
@@ -107,6 +107,7 @@ public:
 
 protected:
 
+  vector<int> candidate_colours_;
   vector<list<int>> vertex_colour_classes_;
 };
 

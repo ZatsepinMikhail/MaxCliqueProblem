@@ -77,18 +77,20 @@ int main() {
     one_row.clear();
   }*/
 
-  //AlgorithmMC mc_max_clique(adjacency_matrix.size(), adjacency_matrix);
+  AlgorithmMC mc_max_clique(adjacency_matrix.size(), adjacency_matrix);
   AlgorithmMCQ mcq_max_clique(adjacency_matrix.size(), adjacency_matrix);
-  //vector<int> mc_max_clique_result = mc_max_clique.FindMaxClique();
+  vector<int> mc_max_clique_result = mc_max_clique.FindMaxClique();
   vector<int> mcq_max_clique_result = mcq_max_clique.FindMaxClique();
+  cout << mc_max_clique_result.size() << ":\n";
+  for (int i = 0; i < mc_max_clique_result.size(); ++i) {
+    cout << mc_max_clique_result[i] << " ";
+  }
+  cout << "\n";
+
+  cout << mcq_max_clique_result.size() << ":\n";
   for (int i = 0; i < mcq_max_clique_result.size(); ++i) {
     cout << mcq_max_clique_result[i] << " ";
   }
   cout << "\n";
-
-  /*for (int i = 0; i < mcq_max_clique_result.size(); ++i) {
-    cout << mcq_max_clique_result[i] << " ";
-  }
-  cout << "\n";*/
   return 0;
 }
